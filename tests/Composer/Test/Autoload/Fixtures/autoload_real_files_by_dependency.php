@@ -6,22 +6,16 @@ class ComposerAutoloaderInitFilesAutoloadOrder
 {
     private static $loader;
 
-    public static function loadClassLoader($class)
-    {
-        if ('Composer\Autoload\ClassLoader' === $class) {
-            require __DIR__ . '/ClassLoader.php';
-        }
-    }
-
     public static function getLoader()
     {
         if (null !== self::$loader) {
             return self::$loader;
         }
 
-        spl_autoload_register(array('ComposerAutoloaderInitFilesAutoloadOrder', 'loadClassLoader'), true, true);
+        if (!class_exists('Composer\Autoload\ClassLoader', false)) {
+            require __DIR__ . '/ClassLoader.php';
+        }
         self::$loader = $loader = new \Composer\Autoload\ClassLoader();
-        spl_autoload_unregister(array('ComposerAutoloaderInitFilesAutoloadOrder', 'loadClassLoader'));
 
         $vendorDir = dirname(__DIR__);
         $baseDir = dirname($vendorDir);
